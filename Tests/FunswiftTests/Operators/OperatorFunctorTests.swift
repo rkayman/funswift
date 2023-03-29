@@ -40,7 +40,7 @@ final class OperatorFunctor: XCTestCase {
 		XCTAssertEqual("failure", eitherResult.left())
 	}
 
-	func testDefferedMap() {
+	func testDeferredMap() {
 		let deferred = Deferred { $0("Hello world") } <&> uppercased
 		deferred.run { result in
 			XCTAssertEqual("HELLO WORLD", result)

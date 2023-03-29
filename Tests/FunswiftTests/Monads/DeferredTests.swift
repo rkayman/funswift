@@ -105,11 +105,11 @@ final class DeferredTests: XCTestCase {
             Deferred.delayed(by: 1) { URL.init(string: "http://www.google.com" ) }
         )
 
-        result.run { first, second, third, forth in
+        result.run { first, second, third, fourth in
             XCTAssertEqual(10, first)
             XCTAssertEqual("Hello world", second)
             XCTAssertEqual(10.2, third)
-            XCTAssertNotNil(forth, "Shouldnt be nil")
+            XCTAssertNotNil(fourth, "Shouldnt be nil")
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1.1)
@@ -126,11 +126,11 @@ final class DeferredTests: XCTestCase {
             Deferred.delayed(by: 0.9) { "Hello world" },
 			Deferred { $0("Hello Callback") }
 		)
-		result.run { first, second, third, forth, fifth in
+		result.run { first, second, third, fourth, fifth in
 			XCTAssertEqual(10, first)
 			XCTAssertEqual(10, second)
 			XCTAssertEqual(10.2, third)
-			XCTAssertEqual("Hello world", forth)
+			XCTAssertEqual("Hello world", fourth)
 			XCTAssertEqual("Hello Callback", fifth)
 			expectation.fulfill()
 		}
@@ -149,11 +149,11 @@ final class DeferredTests: XCTestCase {
             Deferred { $0("Hello Callback") },
             Deferred(io: IO { 101 })
         )
-        result.run { first, second, third, forth, fifth, sixth in
+        result.run { first, second, third, fourth, fifth, sixth in
             XCTAssertEqual(10, first)
             XCTAssertEqual(10, second)
             XCTAssertEqual(10.2, third)
-            XCTAssertEqual("Hello world", forth)
+            XCTAssertEqual("Hello world", fourth)
             XCTAssertEqual("Hello Callback", fifth)
             XCTAssertEqual(101, sixth)
             expectation.fulfill()
@@ -173,11 +173,11 @@ final class DeferredTests: XCTestCase {
             Deferred { $0("Hello Callback") },
             Deferred(io: IO { 101 })
         )
-        result.run { first, second, third, forth, fifth, sixth in
+        result.run { first, second, third, fourth, fifth, sixth in
             XCTAssertEqual(10, first)
             XCTAssertEqual(10, second)
             XCTAssertEqual(10.2, third)
-            XCTAssertEqual("Hello world", forth)
+            XCTAssertEqual("Hello world", fourth)
             XCTAssertEqual("Hello Callback", fifth)
             XCTAssertEqual(101, sixth)
             expectation.fulfill()
@@ -210,7 +210,7 @@ final class DeferredTests: XCTestCase {
 		wait(for: [expectation], timeout: 0.55)
 	}
 
-    func testCancelation() {
+    func testCancellation() {
         let expectation = XCTestExpectation(description: "Waiting")
         var result = Deferred.delayed(by: 0.8) { 10 }
 
@@ -222,7 +222,7 @@ final class DeferredTests: XCTestCase {
         wait(for: [expectation], timeout: 1)
     }
 
-	func testAnyCanceableDeferred() {
+	func testAnyCancellableDeferred() {
 		
         var deferredWithInt = Deferred.delayed(by: 0.1) { 10 }
             .map(String.init)
@@ -240,8 +240,8 @@ final class DeferredTests: XCTestCase {
             expectationString.fulfill()
         }
 
-		let canceable: [AnyCancellableDeferred] = [deferredWithInt, deferredWithString]
-		canceable.forEach { $0.cancel() }
+		let cancellable: [AnyCancellableDeferred] = [deferredWithInt, deferredWithString]
+		cancellable.forEach { $0.cancel() }
 
 		wait(for: [expectationInt, expectationString], timeout: 2)
 	}

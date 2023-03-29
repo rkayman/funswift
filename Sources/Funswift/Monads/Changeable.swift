@@ -21,10 +21,8 @@ public struct Changeable<A> {
         return Changeable<B>(value: result.value, hasChanges: result.hasChanges || hasChanges)
     }
 
-    public func write<Value: Equatable>(
-        _ newValue: Value, at keyPath: WritableKeyPath<A, Value>
-    ) -> Changeable<A> {
-
+    public func write<Value: Equatable>(_ newValue: Value,
+                                        at keyPath: WritableKeyPath<A, Value>) -> Changeable<A> {
         guard newValue != value[keyPath: keyPath]
         else { return Changeable(value: value, hasChanges: false) }
 
@@ -44,18 +42,13 @@ public struct Changeable<A> {
 	}
 }
 
-public func flatMap<A, B>(
-	_ f: @escaping (A) -> Changeable<B>
-) -> (Changeable<A>) -> Changeable<B> {
+public func flatMap<A, B>(_ f: @escaping (A) -> Changeable<B>) -> (Changeable<A>) -> Changeable<B> {
     return { $0.flatMap(f) }
 }
 
-public func write<Value: Equatable, Root>(
-	_ value: Value,
-	at keyPath: WritableKeyPath<Root, Value>
-) -> (Root) -> Changeable<Root> {
+public func write<Value: Equatable, Root>(_ value: Value,
+                                          at keyPath: WritableKeyPath<Root, Value>) -> (Root) -> Changeable<Root> {
 	return { root in
-
 		guard value != root[keyPath: keyPath]
 		else { return Changeable(value: root, hasChanges: false) }
 

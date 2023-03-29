@@ -17,7 +17,7 @@ public enum DeferredError: Error {
 
 public struct Deferred<A>: GenericTypeConstructor {
 	
-	public typealias ParamtricType = A
+	public typealias ParametricType = A
     public typealias CancellationToken = () -> Void
     public typealias Promise = (@escaping (A) -> Void) -> Void
 
@@ -53,7 +53,7 @@ public struct Deferred<A>: GenericTypeConstructor {
 	}
 }
 
-// MARK: - functors map/mapT
+// MARK:- functors map/mapT
 extension Deferred {
 
 	public func map<B>(_ f: @escaping (A) -> B) -> Deferred<B> {
@@ -62,32 +62,26 @@ extension Deferred {
         },  cancel: onCancel)
 	}
 
-    public func mapT <Input,Output> (
-        _ f: @escaping (Input) -> Output
-    ) -> Deferred<Optional<Output>> where ParamtricType == Optional<Input> {
+    public func mapT<Input,Output>(_ f: @escaping (Input) -> Output) -> Deferred<Optional<Output>> where ParametricType == Optional<Input> {
         Deferred<Optional<Output>> ({ callback in
             self.run { callback($0.map(f)) }
         }, cancel: onCancel)
     }
 
-    public func mapT <Input, Output> (
-        _ f: @escaping (Input) -> Output
-    ) -> Deferred<Result<Output, Error>> where ParamtricType == Result<Input, Error> {
+    public func mapT<Input, Output>(_ f: @escaping (Input) -> Output) -> Deferred<Result<Output, Error>> where ParametricType == Result<Input, Error> {
         Deferred<Result<Output, Error>> ({ callback in
             self.run { callback($0.map(f)) }
         }, cancel: onCancel)
     }
 
-	public func mapT <Input, Output, Left> (
-		_ f: @escaping (Input) -> Output
-	) -> Deferred<Either<Left, Output>> where ParamtricType == Either<Left, Input> {
+	public func mapT<Input, Output, Left>(_ f: @escaping (Input) -> Output) -> Deferred<Either<Left, Output>> where ParametricType == Either<Left, Input> {
 		Deferred<Either<Left, Output>> ({ callback in
 			self.run { callback($0.map(f)) }
 		}, cancel: onCancel)
 	}
 }
 
-// MARK: - flatMap/flatMapT
+// MARK:- flatMap/flatMapT
 extension Deferred {
 
 	public func flatMap<B>(_ f: @escaping (A) -> Deferred<B>) -> Deferred<B> {
@@ -96,32 +90,26 @@ extension Deferred {
 		}, cancel: onCancel)
 	}
 
-	public func flatMapT <Input,Output> (
-		_ f: @escaping (Input) -> Optional<Output>
-	) -> Deferred<Optional<Output>> where ParamtricType == Optional<Input> {
+	public func flatMapT<Input, Output>(_ f: @escaping (Input) -> Optional<Output>) -> Deferred<Optional<Output>> where ParametricType == Optional<Input> {
 		Deferred<Optional<Output>>({ callback in
 			self.run { callback($0.flatMap(f)) }
 		}, cancel: onCancel)
 	}
 
-	public func flatMapT <Input, Output> (
-		_ f: @escaping (Input) -> Result<Output, Error>
-	) -> Deferred<Result<Output, Error>> where ParamtricType == Result<Input, Error> {
+	public func flatMapT<Input, Output>(_ f: @escaping (Input) -> Result<Output, Error>) -> Deferred<Result<Output, Error>> where ParametricType == Result<Input, Error> {
 		Deferred<Result<Output, Error>> ({ callback in
 			self.run { callback($0.flatMap(f)) }
 		}, cancel: onCancel)
 	}
 
-	public func flatMapT <Input, Output, Left> (
-		_ f: @escaping (Input) -> Either<Left, Output>
-	) -> Deferred<Either<Left, Output>> where ParamtricType == Either<Left, Input> {
+	public func flatMapT<Input, Output, Left>(_ f: @escaping (Input) -> Either<Left, Output>) -> Deferred<Either<Left, Output>> where ParametricType == Either<Left, Input> {
 		Deferred<Either<Left, Output>> ({ callback in
 			self.run { callback($0.flatMap(f)) }
 		}, cancel: onCancel)
 	}
 }
 
-// MARK: - Cancelation
+// MARK:- Cancelation
 extension Deferred: AnyCancellableDeferred {
 
     public func cancel() {
@@ -131,8 +119,9 @@ extension Deferred: AnyCancellableDeferred {
     }
 }
 
-// MARK: - Delay
+// MARK:- Delay
 extension Deferred {
+    
 	public static func delayed(by interval: TimeInterval, work: @escaping () -> A ) -> Deferred {
 		Deferred { callback in
 			DispatchQueue.global().asyncAfter(deadline: .now() + interval) {
@@ -146,37 +135,28 @@ extension Deferred {
     }
 }
 
-// MARK: - Pure
+// MARK:- Pure
 extension Deferred {
 
 	public static func pure(_ value: A) -> Deferred<A> {
 		Deferred(value)
 	}
 
-	public static func pureT<B>(
-		_ value: B
-	) -> Deferred<Optional<B>> where ParamtricType == Optional<B> {
+	public static func pureT<B>(_ value: B) -> Deferred<Optional<B>> where ParametricType == Optional<B> {
 		Deferred { $0(.some(value)) }
 	}
 
-	public static func pureT<B, E: Error>(
-		_ value: B
-	) -> Deferred<Result<B, E>> where ParamtricType == Result<B, E> {
+	public static func pureT<B, E: Error>(_ value: B) -> Deferred<Result<B, E>> where ParametricType == Result<B, E> {
 		Deferred { $0(.success(value)) }
 	}
 
-	public static func pureT<B, Left>(
-		_ value: B
-	) -> Deferred<Either<Left, B>> where ParamtricType == Either<Left, B> {
+	public static func pureT<B, Left>(_ value: B) -> Deferred<Either<Left, B>> where ParametricType == Either<Left, B> {
 		Deferred { $0(.right(value)) }
 	}
 }
 
-// MARK: - Zip
-public func zip<A, B>(
-    _ lhs: Deferred<A>,
-    _ rhs: Deferred<B>
-) -> Deferred<(A, B)> {
+// MARK:- Zip
+public func zip<A, B>(_ lhs: Deferred<A>, _ rhs: Deferred<B>) -> Deferred<(A, B)> {
 
     var result = Deferred<(A, B)> { callback in
 
@@ -207,103 +187,85 @@ public func zip<A, B>(
     return result
 }
 
-public func zip<A, B, C>(
-    _ first: Deferred<A>,
-    _ second: Deferred<B>,
-    _ third: Deferred<C>
-) -> Deferred<(A, B, C)> {
+public func zip<A, B, C>(_ first: Deferred<A>, _ second: Deferred<B>, _ third: Deferred<C>) -> Deferred<(A, B, C)> {
     zip(first, zip(second, third))
         .map { ($0, $1.0, $1.1) }
 }
 
-public func zip<A, B, C, D>(
-    _ first: Deferred<A>,
-    _ second: Deferred<B>,
-    _ third: Deferred<C>,
-    _ forth: Deferred<D>
-) -> Deferred<(A, B, C, D)> {
-    zip(first, zip(second, third, forth))
+public func zip<A, B, C, D>(_ first: Deferred<A>,
+                            _ second: Deferred<B>,
+                            _ third: Deferred<C>,
+                            _ fourth: Deferred<D>) -> Deferred<(A, B, C, D)> {
+    zip(first, zip(second, third, fourth))
         .map { ($0, $1.0, $1.1, $1.2) }
 }
 
-public func zip<A, B, C, D, E>(
-    _ first: Deferred<A>,
-    _ second: Deferred<B>,
-    _ third: Deferred<C>,
-    _ forth: Deferred<D>,
-    _ fifth: Deferred<E>
-) -> Deferred<(A, B, C, D, E)> {
-    zip(first, zip(second, third, forth, fifth))
+public func zip<A, B, C, D, E>(_ first: Deferred<A>,
+                               _ second: Deferred<B>,
+                               _ third: Deferred<C>,
+                               _ fourth: Deferred<D>,
+                               _ fifth: Deferred<E>) -> Deferred<(A, B, C, D, E)> {
+    zip(first, zip(second, third, fourth, fifth))
         .map { ($0, $1.0, $1.1, $1.2, $1.3) }
 }
 
-public func zip<A, B, C, D, E, F>(
-    _ first: Deferred<A>,
-    _ second: Deferred<B>,
-    _ third: Deferred<C>,
-    _ forth: Deferred<D>,
-    _ fifth: Deferred<E>,
-    _ sixth: Deferred<F>
-) -> Deferred<(A, B, C, D, E, F)> {
-    zip(first, zip(second, third, forth, fifth, sixth))
+public func zip<A, B, C, D, E, F>(_ first: Deferred<A>,
+                                  _ second: Deferred<B>,
+                                  _ third: Deferred<C>,
+                                  _ fourth: Deferred<D>,
+                                  _ fifth: Deferred<E>,
+                                  _ sixth: Deferred<F>) -> Deferred<(A, B, C, D, E, F)> {
+    zip(first, zip(second, third, fourth, fifth, sixth))
         .map { ($0, $1.0, $1.1, $1.2, $1.3, $1.4) }
 }
 
-public func zip<A, B, C, D, E, F, G>(
-    _ first: Deferred<A>,
-    _ second: Deferred<B>,
-    _ third: Deferred<C>,
-    _ forth: Deferred<D>,
-    _ fifth: Deferred<E>,
-    _ sixth: Deferred<F>,
-    _ seventh: Deferred<G>
-) -> Deferred<(A, B, C, D, E, F, G)> {
-    zip(first, zip(second, third, forth, fifth, sixth, seventh))
+public func zip<A, B, C, D, E, F, G>(_ first: Deferred<A>,
+                                     _ second: Deferred<B>,
+                                     _ third: Deferred<C>,
+                                     _ fourth: Deferred<D>,
+                                     _ fifth: Deferred<E>,
+                                     _ sixth: Deferred<F>,
+                                     _ seventh: Deferred<G>) -> Deferred<(A, B, C, D, E, F, G)> {
+    zip(first, zip(second, third, fourth, fifth, sixth, seventh))
         .map { ($0, $1.0, $1.1, $1.2, $1.3, $1.4, $1.5) }
 }
 
-public func zip<A, B, C, D, E, F, G, H>(
-    _ first: Deferred<A>,
-    _ second: Deferred<B>,
-    _ third: Deferred<C>,
-    _ forth: Deferred<D>,
-    _ fifth: Deferred<E>,
-    _ sixth: Deferred<F>,
-    _ seventh: Deferred<G>,
-    _ eigth: Deferred<H>
-) -> Deferred<(A, B, C, D, E, F, G, H)> {
-    zip(first, zip(second, third, forth, fifth, sixth, seventh, eigth))
+public func zip<A, B, C, D, E, F, G, H>(_ first: Deferred<A>,
+                                        _ second: Deferred<B>,
+                                        _ third: Deferred<C>,
+                                        _ fourth: Deferred<D>,
+                                        _ fifth: Deferred<E>,
+                                        _ sixth: Deferred<F>,
+                                        _ seventh: Deferred<G>,
+                                        _ eighth: Deferred<H>) -> Deferred<(A, B, C, D, E, F, G, H)> {
+    zip(first, zip(second, third, fourth, fifth, sixth, seventh, eighth))
         .map { ($0, $1.0, $1.1, $1.2, $1.3, $1.4, $1.5, $1.6) }
 }
 
-public func zip<A, B, C, D, E, F, G, H, I>(
-    _ first: Deferred<A>,
-    _ second: Deferred<B>,
-    _ third: Deferred<C>,
-    _ forth: Deferred<D>,
-    _ fifth: Deferred<E>,
-    _ sixth: Deferred<F>,
-    _ seventh: Deferred<G>,
-    _ eigth: Deferred<H>,
-    _ ninth: Deferred<I>
-) -> Deferred<(A, B, C, D, E, F, G, H, I)> {
-    zip(first, zip(second, third, forth, fifth, sixth, seventh, eigth, ninth))
+public func zip<A, B, C, D, E, F, G, H, I>(_ first: Deferred<A>,
+                                           _ second: Deferred<B>,
+                                           _ third: Deferred<C>,
+                                           _ fourth: Deferred<D>,
+                                           _ fifth: Deferred<E>,
+                                           _ sixth: Deferred<F>,
+                                           _ seventh: Deferred<G>,
+                                           _ eighth: Deferred<H>,
+                                           _ ninth: Deferred<I>) -> Deferred<(A, B, C, D, E, F, G, H, I)> {
+    zip(first, zip(second, third, fourth, fifth, sixth, seventh, eighth, ninth))
         .map { ($0, $1.0, $1.1, $1.2, $1.3, $1.4, $1.5, $1.6, $1.7) }
 }
 
-public func zip<A, B, C, D, E, F, G, H, I, J>(
-    _ first: Deferred<A>,
-    _ second: Deferred<B>,
-    _ third: Deferred<C>,
-    _ forth: Deferred<D>,
-    _ fifth: Deferred<E>,
-    _ sixth: Deferred<F>,
-    _ seventh: Deferred<G>,
-    _ eigth: Deferred<H>,
-    _ ninth: Deferred<I>,
-    _ tenth: Deferred<J>
-) -> Deferred<(A, B, C, D, E, F, G, H, I, J)> {
-    zip(first, zip(second, third, forth, fifth, sixth, seventh, eigth, ninth, tenth))
+public func zip<A, B, C, D, E, F, G, H, I, J>(_ first: Deferred<A>,
+                                              _ second: Deferred<B>,
+                                              _ third: Deferred<C>,
+                                              _ fourth: Deferred<D>,
+                                              _ fifth: Deferred<E>,
+                                              _ sixth: Deferred<F>,
+                                              _ seventh: Deferred<G>,
+                                              _ eighth: Deferred<H>,
+                                              _ ninth: Deferred<I>,
+                                              _ tenth: Deferred<J>) -> Deferred<(A, B, C, D, E, F, G, H, I, J)> {
+    zip(first, zip(second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth))
         .map { ($0, $1.0, $1.1, $1.2, $1.3, $1.4, $1.5, $1.6, $1.7, $1.8) }
 }
 

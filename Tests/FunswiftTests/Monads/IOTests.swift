@@ -40,7 +40,7 @@ final class IOTests: XCTestCase {
 			>>- multiplyWithHundred
 			>>- multiplyWithHundred
 
-		XCTAssertEqual(10000000, result.unsafeRun())
+		XCTAssertEqual(10_000_000, result.unsafeRun())
 	}
 
 	func testMapOperator() {

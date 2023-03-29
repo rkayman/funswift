@@ -61,7 +61,7 @@ final class ReaderTests: XCTestCase {
 
 	func testFlatmap() throws {
 
-		let increamentUserAge: (User?) -> Reader<Repository, User?> = { currentUser in
+		let incrementUserAge: (User?) -> Reader<Repository, User?> = { currentUser in
 			return Reader<Repository, User?> {
 				guard let id = currentUser?.id
 				else { return nil }
@@ -80,7 +80,7 @@ final class ReaderTests: XCTestCase {
 
 		let olderUser = try XCTUnwrap(
 			getUser(id: 1)
-			.flatMap(increamentUserAge)
+			.flatMap(incrementUserAge)
 			.run(repository)
 		)
 		XCTAssertEqual(olderUser.age, user.age + 1)

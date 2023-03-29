@@ -20,8 +20,7 @@ let package = Package(
     targets: [
         .target(
             name: "Funswift",
-            dependencies: [],
-			exclude: ["Playground"]
+            dependencies: []
 		),
         .testTarget(
             name: "FunswiftTests",

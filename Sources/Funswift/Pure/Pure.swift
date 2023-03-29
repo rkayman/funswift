@@ -7,27 +7,27 @@
 
 import Foundation
 
-// MARK: - Deferred<A>
+// MARK:- Deferred<A>
 public func pure<A>(_ value: A) -> Deferred<A> {
 	Deferred(value)
 }
 
-// MARK: - Changeable<A>
+// MARK:- Changeable<A>
 public func pure<A>(_ value: A) -> Changeable<A> {
 	Changeable(value)
 }
 
-// MARK: - State<S, A>
+// MARK:- State<S, A>
 public func pure<A, S>(value: A) -> State<S, A> {
 	State(initialValue: value)
 }
 
-// MARK: - Writer<A, M: Monoid>
+// MARK:- Writer<A, M: Monoid>
 public func pure<A, M: Monoid>(value: A) -> Writer<A, M> {
 	Writer<A, M>(value: value, output: M.empty)
 }
 
-// MARK: - Pure IO<A>
+// MARK:- Pure IO<A>
 public func pure<A>(_ value: A) -> IO<A> {
 	IO<A> { value }
 }

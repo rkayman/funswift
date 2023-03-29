@@ -25,8 +25,8 @@ final class PredicateTests: XCTestCase {
 		XCTAssertFalse(
 			allOf(
 				Predicate<Int> { _ in true },
-				Predicate<Int> { _ in false },
-				Predicate<Int> { _ in true }
+				Predicate<Int> { _ in true },
+                Predicate<Int> { _ in false }
 			).contains(0), "Should be false"
 		)
 	}
@@ -47,8 +47,8 @@ final class PredicateTests: XCTestCase {
 			allOf(
 				[
 					Predicate<Int> { _ in true },
-					Predicate<Int> { _ in false },
-					Predicate<Int> { _ in true }
+					Predicate<Int> { _ in true },
+                    Predicate<Int> { _ in false }
 				]
 			).contains(0), "Should be false"
 		)

@@ -15,9 +15,7 @@ public struct Predicate<A> {
 		self.contains = contains
 	}
 
-	public func contraMap<B>(
-		_ f: @escaping (B) -> A
-	) -> Predicate<B> {
+	public func contraMap<B>(_ f: @escaping (B) -> A) -> Predicate<B> {
 		Predicate<B> { self.contains(f($0)) }
 	}
 }
@@ -38,40 +36,28 @@ extension Predicate {
 }
 
 // MARK:- anyOf
-public func anyOf<A>(
-	_ predicate: Predicate<A>...
-) -> Predicate<A> {
+public func anyOf<A>(_ predicate: Predicate<A>...) -> Predicate<A> {
 	Predicate { a in predicate.contains(where: { $0.contains(a) }) }
 }
 
-public func anyOf<A>(
-	_ predicate: [Predicate<A>]
-) -> Predicate<A> {
+public func anyOf<A>(_ predicate: [Predicate<A>]) -> Predicate<A> {
 	Predicate { a in predicate.contains(where: { $0.contains(a) }) }
 }
 
 // MARK:- allOf
-public func allOf<A>(
-	_ predicate: Predicate<A>...
-) -> Predicate<A> {
+public func allOf<A>(_ predicate: Predicate<A>...) -> Predicate<A> {
 	Predicate { a in predicate.allSatisfy { $0.contains(a) } }
 }
 
-public func allOf<A>(
-	_ predicate: [Predicate<A>]
-) -> Predicate<A> {
+public func allOf<A>(_ predicate: [Predicate<A>]) -> Predicate<A> {
 	Predicate { a in predicate.allSatisfy { $0.contains(a) } }
 }
 
 // MARK:- noneOf
-public func noneOf<A>(
-	_ predicate: Predicate<A>...
-) -> Predicate<A> {
+public func noneOf<A>(_ predicate: Predicate<A>...) -> Predicate<A> {
 	Predicate { a in !predicate.contains(where: { $0.contains(a) }) }
 }
 
-public func noneOf<A>(
-	_ predicate: [Predicate<A>]
-) -> Predicate<A> {
+public func noneOf<A>(_ predicate: [Predicate<A>]) -> Predicate<A> {
 	Predicate { a in !predicate.contains(where: { $0.contains(a) }) }
 }

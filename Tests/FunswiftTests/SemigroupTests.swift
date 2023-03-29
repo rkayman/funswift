@@ -39,14 +39,14 @@ final class SemigroupTests: XCTestCase {
 		let incr: (Int) -> Int = { $0 + 1 }
 		let multiply: (Int) -> Int = { $0 * $0 }
 
-		let multiplyAndInreament = multiply <> incr
-		XCTAssertEqual(101, multiplyAndInreament(10))
+		let multiplyAndIncrement = multiply <> incr
+		XCTAssertEqual(101, multiplyAndIncrement(10))
 	}
 
 	func testInoutFunctions() {
 		var value: Int = 10
-		let multiplyAndInreament = multiply <> incr
-		multiplyAndInreament(&value)
+		let multiplyAndIncrement = multiply <> incr
+		multiplyAndIncrement(&value)
 		XCTAssertEqual(101, value)
 	}
 

@@ -7,7 +7,8 @@
 
 import Foundation
 
-// MARK: - onSuccess / onFailure
+
+// MARK:- onSuccess / onFailure
 extension Result {
 
 	/**
@@ -18,6 +19,7 @@ extension Result {
 	public func onSuccess(_ f: (Success) -> Void) -> Self {
 		guard case let .success(value) = self
 		else { return self }
+        
 		f(value)
 		return self
 	}
@@ -30,7 +32,8 @@ extension Result {
 	public func onFailure(_ f: (Failure) -> Void) -> Self {
 		guard case let .failure(value) = self
 		else { return self }
-		f(value)
+		
+        f(value)
 		return self
 	}
 
@@ -45,7 +48,7 @@ extension Result {
 }
 
 
-// MARK: - Pure IO<A>
+// MARK:- Pure IO<A>
 /**
 Pure that lifts a generic type to Result
 - parameter value: Value that should be lifted
@@ -54,10 +57,8 @@ Pure that lifts a generic type to Result
 
 public func pure<A>(_ value: A) -> Result<A, Error> { .success(value) }
 
-public func zip<A, B, ErrorType: Error>(
-	_ lhs: Result<A, ErrorType>,
-	_ rhs: Result<B, ErrorType>)
--> Result<(A, B), ErrorType> {
+public func zip<A, B, ErrorType: Error>(_ lhs: Result<A, ErrorType>,
+                                        _ rhs: Result<B, ErrorType>) -> Result<(A, B), ErrorType> {
 
 	switch (lhs, rhs) {
 	case let (.success(first), .success(second)):
@@ -69,107 +70,102 @@ public func zip<A, B, ErrorType: Error>(
 	}
 }
 
-public func zip<A, B, C, ErrorType: Error>(
-	_ first: Result<A, ErrorType>,
-	_ second: Result<B, ErrorType>,
-	_ third: Result<C, ErrorType>
-) -> Result<(A, B, C), ErrorType> {
+public func zip<A, B, C, ErrorType: Error>(_ first: Result<A, ErrorType>,
+                                           _ second: Result<B, ErrorType>,
+                                           _ third: Result<C, ErrorType>) -> Result<(A, B, C), ErrorType> {
 	zip(first, zip(second, third))
 		.map { ($0, $1.0, $1.1) }
 }
 
-public func zip<A, B, C, D, ErrorType: Error>(
-	_ first: Result<A, ErrorType>,
-	_ second: Result<B, ErrorType>,
-	_ third: Result<C, ErrorType>,
-	_ forth: Result<D, ErrorType>
-) -> Result<(A, B, C, D), ErrorType> {
-	zip(first, zip(second, third, forth))
+public func zip<A, B, C, D, ErrorType: Error>(_ first: Result<A, ErrorType>,
+                                              _ second: Result<B, ErrorType>,
+                                              _ third: Result<C, ErrorType>,
+                                              _ fourth: Result<D, ErrorType>) -> Result<(A, B, C, D), ErrorType> {
+	zip(first, zip(second, third, fourth))
 		.map { ($0, $1.0, $1.1, $1.2) }
 }
 
-public func zip<A, B, C, D, E, ErrorType: Error>(
-	_ first: Result<A, ErrorType>,
-	_ second: Result<B, ErrorType>,
-	_ third: Result<C, ErrorType>,
-	_ forth: Result<D, ErrorType>,
-	_ fifth: Result<E, ErrorType>
-) -> Result<(A, B, C, D, E), ErrorType> {
-	zip(first, zip(second, third, forth, fifth))
+public func zip<A, B, C, D, E, ErrorType: Error>(_ first: Result<A, ErrorType>,
+                                                 _ second: Result<B, ErrorType>,
+                                                 _ third: Result<C, ErrorType>,
+                                                 _ fourth: Result<D, ErrorType>,
+                                                 _ fifth: Result<E, ErrorType>) -> Result<(A, B, C, D, E), ErrorType> {
+	zip(first, zip(second, third, fourth, fifth))
 		.map { ($0, $1.0, $1.1, $1.2, $1.3) }
 }
 
 public func zip<A, B, C, D, E, F, ErrorType: Error>(
-	_ first: Result<A, ErrorType>,
-	_ second: Result<B, ErrorType>,
-	_ third: Result<C, ErrorType>,
-	_ forth: Result<D, ErrorType>,
-	_ fifth: Result<E, ErrorType>,
-	_ sixth: Result<F, ErrorType>
-) -> Result<(A, B, C, D, E, F), ErrorType> {
-	zip(first, zip(second, third, forth, fifth, sixth))
-		.map { ($0, $1.0, $1.1, $1.2, $1.3, $1.4) }
+    _ first: Result<A, ErrorType>,
+    _ second: Result<B, ErrorType>,
+    _ third: Result<C, ErrorType>,
+    _ fourth: Result<D, ErrorType>,
+    _ fifth: Result<E, ErrorType>,
+    _ sixth: Result<F, ErrorType>) -> Result<(A, B, C, D, E, F), ErrorType> {
+        
+        zip(first, zip(second, third, fourth, fifth, sixth))
+            .map { ($0, $1.0, $1.1, $1.2, $1.3, $1.4) }
 }
 
 public func zip<A, B, C, D, E, F, G, ErrorType: Error>(
-	_ first: Result<A, ErrorType>,
-	_ second: Result<B, ErrorType>,
-	_ third: Result<C, ErrorType>,
-	_ forth: Result<D, ErrorType>,
-	_ fifth: Result<E, ErrorType>,
-	_ sixth: Result<F, ErrorType>,
-	_ seventh: Result<G, ErrorType>
-) -> Result<(A, B, C, D, E, F, G), ErrorType> {
-	zip(first, zip(second, third, forth, fifth, sixth, seventh))
-		.map { ($0, $1.0, $1.1, $1.2, $1.3, $1.4, $1.5) }
+    _ first: Result<A, ErrorType>,
+    _ second: Result<B, ErrorType>,
+    _ third: Result<C, ErrorType>,
+    _ fourth: Result<D, ErrorType>,
+    _ fifth: Result<E, ErrorType>,
+    _ sixth: Result<F, ErrorType>,
+    _ seventh: Result<G, ErrorType>) -> Result<(A, B, C, D, E, F, G), ErrorType> {
+        
+        zip(first, zip(second, third, fourth, fifth, sixth, seventh))
+            .map { ($0, $1.0, $1.1, $1.2, $1.3, $1.4, $1.5) }
 }
 
 public func zip<A, B, C, D, E, F, G, H, ErrorType: Error>(
 	_ first: Result<A, ErrorType>,
 	_ second: Result<B, ErrorType>,
 	_ third: Result<C, ErrorType>,
-	_ forth: Result<D, ErrorType>,
+	_ fourth: Result<D, ErrorType>,
 	_ fifth: Result<E, ErrorType>,
 	_ sixth: Result<F, ErrorType>,
 	_ seventh: Result<G, ErrorType>,
-	_ eigth: Result<H, ErrorType>
-) -> Result<(A, B, C, D, E, F, G, H), ErrorType> {
-	zip(first, zip(second, third, forth, fifth, sixth, seventh, eigth))
-		.map { ($0, $1.0, $1.1, $1.2, $1.3, $1.4, $1.5, $1.6) }
+	_ eighth: Result<H, ErrorType>) -> Result<(A, B, C, D, E, F, G, H), ErrorType> {
+        
+        zip(first, zip(second, third, fourth, fifth, sixth, seventh, eighth))
+            .map { ($0, $1.0, $1.1, $1.2, $1.3, $1.4, $1.5, $1.6) }
 }
 
 public func zip<A, B, C, D, E, F, G, H, I, ErrorType: Error>(
-	_ first: Result<A, ErrorType>,
-	_ second: Result<B, ErrorType>,
-	_ third: Result<C, ErrorType>,
-	_ forth: Result<D, ErrorType>,
-	_ fifth: Result<E, ErrorType>,
-	_ sixth: Result<F, ErrorType>,
-	_ seventh: Result<G, ErrorType>,
-	_ eigth: Result<H, ErrorType>,
-	_ ninth: Result<I, ErrorType>
-) -> Result<(A, B, C, D, E, F, G, H, I), ErrorType> {
-	zip(first, zip(second, third, forth, fifth, sixth, seventh, eigth, ninth))
-		.map { ($0, $1.0, $1.1, $1.2, $1.3, $1.4, $1.5, $1.6, $1.7) }
+    _ first: Result<A, ErrorType>,
+    _ second: Result<B, ErrorType>,
+    _ third: Result<C, ErrorType>,
+    _ fourth: Result<D, ErrorType>,
+    _ fifth: Result<E, ErrorType>,
+    _ sixth: Result<F, ErrorType>,
+    _ seventh: Result<G, ErrorType>,
+    _ eighth: Result<H, ErrorType>,
+    _ ninth: Result<I, ErrorType>) -> Result<(A, B, C, D, E, F, G, H, I), ErrorType> {
+
+        zip(first, zip(second, third, fourth, fifth, sixth, seventh, eighth, ninth))
+            .map { ($0, $1.0, $1.1, $1.2, $1.3, $1.4, $1.5, $1.6, $1.7) }
 }
 
 public func zip<A, B, C, D, E, F, G, H, I, J, ErrorType: Error>(
-	_ first: Result<A, ErrorType>,
-	_ second: Result<B, ErrorType>,
-	_ third: Result<C, ErrorType>,
-	_ forth: Result<D, ErrorType>,
-	_ fifth: Result<E, ErrorType>,
-	_ sixth: Result<F, ErrorType>,
-	_ seventh: Result<G, ErrorType>,
-	_ eigth: Result<H, ErrorType>,
-	_ ninth: Result<I, ErrorType>,
-	_ tenth: Result<J, ErrorType>
-) -> Result<(A, B, C, D, E, F, G, H, I, J), ErrorType> {
-	zip(first, zip(second, third, forth, fifth, sixth, seventh, eigth, ninth, tenth))
-		.map { ($0, $1.0, $1.1, $1.2, $1.3, $1.4, $1.5, $1.6, $1.7, $1.8) }
+    _ first: Result<A, ErrorType>,
+    _ second: Result<B, ErrorType>,
+    _ third: Result<C, ErrorType>,
+    _ fourth: Result<D, ErrorType>,
+    _ fifth: Result<E, ErrorType>,
+    _ sixth: Result<F, ErrorType>,
+    _ seventh: Result<G, ErrorType>,
+    _ eighth: Result<H, ErrorType>,
+    _ ninth: Result<I, ErrorType>,
+    _ tenth: Result<J, ErrorType>) -> Result<(A, B, C, D, E, F, G, H, I, J), ErrorType> {
+        
+        zip(first, zip(second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth))
+            .map { ($0, $1.0, $1.1, $1.2, $1.3, $1.4, $1.5, $1.6, $1.7, $1.8) }
 }
 
-// MARK: - Concat
+
+// MARK:- Concat
 extension Result where Failure: Error {
 	public func concat<NewSuccess>(_ lhs: Result<NewSuccess, Failure>) -> Result<(Success, NewSuccess), Failure> {
 		zip(self, lhs)

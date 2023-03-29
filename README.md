@@ -4,7 +4,7 @@ A tiny package full of functional tools that you can use in your apps
 
 !["Logo"](https://github.com/konrad1977/funswift/blob/main/Images/logo.png)
 
-One of the goals is to have a very high codecoverage. If you find bugs - please report it in the issues or even better do a Pull Request.
+One of the goals is to have a very high code coverage. If you find bugs - please report it in the issues or even better do a Pull Request.
 
 ![](https://img.shields.io/github/license/konrad1977/funswift) ![](https://img.shields.io/github/languages/top/konrad1977/funswift)
 
@@ -24,11 +24,11 @@ let package = Package(
 
 #### Playground
 
-I've added Playground pages where you can poke around and try some of the feature set of funswift. Just as the tests, the goal is to cover atleast most of the functionality.
+I've added Playground pages where you can poke around and try some of the feature set of funswift. Just as the tests, the goal is to cover at least most of the functionality.
 
 #### Tests
 
-My goal is to provide tests for all the [monad laws](https://wiki.haskell.org/Monad_laws) and [functor laws](https://wiki.haskell.org/Functor). Right now I am aiming for 100% Codecoverage.
+My goal is to provide tests for all the [monad laws](https://wiki.haskell.org/Monad_laws) and [functor laws](https://wiki.haskell.org/Functor). Right now I am aiming for 100% code coverage.
 
 ### Monads
 
@@ -36,10 +36,10 @@ My goal is to provide tests for all the [monad laws](https://wiki.haskell.org/Mo
 | --------------------- | ------------------------------------------------------------ |
 | [IO](#IO)             | Safely do effects synchronously                              |
 | [Deferred](#deferred) | Safely do effects asynchronously                             |
-| Reader                | Often used for depency injection. Where you want to change the environment |
+| Reader                | Often used for depency injection; where you want to change the environment |
 | Writer                | Composable logger                                            |
 | State                 | Handle state                                                 |
-| Cont                  | Avoid callback hell                                          |
+| Continuation          | Avoid callback hell                                          |
 | Changeable            | Check if reference/value types are changed through KeyValues |
 
 
@@ -59,7 +59,7 @@ My goal is to provide tests for all the [monad laws](https://wiki.haskell.org/Mo
 
 ## Predicate
 
-`Predicate` is a wrapper around a function that consumes a value and produces a boolean. Its used to check if a value is in the predicate. It consumes a value and its supports a `contraMap` operation on its input. Contramap is when the arrows (morphism) changes direction and can be used to lift the consuming part to work on different strategies.
+`Predicate` is a wrapper around a function that consumes a value and produces a boolean.  It's used to check if a value is in the predicate.  It consumes a value and it supports a `contraMap` operation on its input.  ContraMap is when the arrows (morphism) changes direction and can be used to lift the consuming part to work on different strategies.
 
  `Union` - creates a new Predicate and checks if value is inside self **or** the other predicate.
 
@@ -77,7 +77,7 @@ Another useful property is that it can be used to have predictability when worki
 
 ## Semigroup protocol
 
-Allows sets/types to be concatinated by using the + operator. 
+Allows sets/types to be concatenated by using the + operator. 
 
 ```swift
 extension String: Semigroup {}
@@ -89,27 +89,27 @@ extension Array: Semigroup {}
 [object] <> [anotherObject] // [object, anotherObject]
 ```
 
-This allows us to use Semigroup protocol instead where we want to concatinate objects, we added generalization we no longer need to work with concrete types. Semigroup always returns the same type. So if we do A + A = A
+This allows us to use Semigroup protocol instead where we want to concatenate objects.  We added generalization; therefore, we no longer need to work with concrete types. Semigroup always returns the same type.  So if we do A + A = A
 
 ## Monoid protocol
 
-Monoid inherits from Semigroup but adds the posibility to be empty/return an empty object. For instance an empty string  "" or an empty array [].
+Monoid inherits from Semigroup but adds the posibility to be empty/return an empty object.  For instance, an empty string "" or an empty array [].
 
 ## Why focus on monads?
 
-Funswift is not all about monads but its my main focus. They solve some specific problems and make life easier as a developer no matter if you prefeer imperative or functional style. And swift is already full of monads, like `string`, `SubString`, `Array` (sequenses), `Optional` and `Result`.
+Funswift is not all about monads but it's the main focus.  Monads solve some specific problems and make life easier as a developer no matter if you prefeer imperative or functional style.  Plus, swift is already full of monads, like `string`, `SubString`, `Array` (sequences), `Optional` and `Result`.
 
 ## Some common features of all the monads in the funswift.
 
-All monads supports atleast three functions: `pure`, `flatMap` and `map`. Some of them have support for `zip` and convience methods for instantiate itself from another monadic type. `IO` can for instance be created from a `Deferred` and `Deferred` can be created from an `IO`.
+All monads supports at least three functions: `pure`, `flatMap` and `map`.  Some of them have support for `zip` and convenience methods to instantiate itself from another monadic type.  `IO` can, for instance, be created from a `Deferred` and `Deferred` can be created from an `IO`.
 
 `pure` helps you lift a parametric value up to the world of the monadic values. Its just a simple way of creating a monad with a wrapped value. Its called `Some`, and `Just` in some other languages.
 
-All monads produces a value, and they are all Covariant on their outputs. Some like the Reader which both producers and consumes value are Covariant on the output and Contravariant on the input. 
+All monads produces a value, and they are all covariant on their outputs. Some, like the Reader, which both produces and consumes values, are covariant on the output and contravariant on the input. 
 
 ## IO
 
-In pure functional languages like Haskell its impossible to have an effect without using monads. An effect can be reading from input, disk, network or anything else outside your control. An easy way of dealing with effects is to wrap a value inside an `IO`-monad. `IO` allows manipulating effects, transform (`map`), and chain (bind, `flatmap`, `>>-`) them. IO is also lazy which is also another important aspect of functional programming. To run an IO-effect you need to call `unsafeRun()` . 
+In pure functional languages, like Haskell, it's impossible to have an effect without using monads.  An effect can be reading from input, disk, network or anything else outside your control.  An easy way of dealing with effects is to wrap a value inside an `IO`-monad. `IO` allows manipulating effects, transform (`map`), and chain (bind, `flatmap`, `>>-`) them.  IO is also lazy; which is another important aspect of functional programming.  To run an IO-effect you need to call `unsafeRun()` . 
 
 ```swift
 let lazyHelloWorld = IO<String> { "hello world" }
@@ -122,9 +122,11 @@ Sometimes you don't know when the code is done executing and you dont want to bl
 
 ## Curry
 
-In functional programming its very common to have functions that takes one value and returns a value, thats the. actuall definition of a function. Functions that takes several values are often curried so they can be partially applied. Funswift has some overloads of curry to help out with that. 
+In functional programming its very common to have functions that takes one argument and return a value, that's the actual definition of a function.  Functions that take several arguments are often curried so they can be partially applied.  Funswift has some overloads of curry to help transform functions with multiple arguments into a function with one argument.
 
-***Example of currying.*** 
+NOTE: Official currying and partial application was deprecated in an earlier version of Swift.
+
+***Example of currying*** 
 
 ```swift
 func takesTwo(first: Int, second: Int) -> Int // (Int, Int) -> Int
@@ -148,7 +150,7 @@ zip(
 .onFailure(showValidationError)
 ```
 
-## Projects that is using funswift
+## Projects that are using funswift
 
 [Project Explorer (CLI tool for analysing source files)](https://github.com/konrad1977/ProjectExplorer)
 
@@ -170,3 +172,4 @@ The CodeAnalyser library uses IO-monad or Deferred-monad for almost everything. 
 
 I also recommend just searching on the internet to get more information about a specific monad to deeper your understanding of it. [Haskell Wiki](https://wiki.haskell.org/All_About_Monads) is a great source of information.
 
+Updated: 24 March 2023
