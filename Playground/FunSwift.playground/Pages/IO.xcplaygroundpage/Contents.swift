@@ -11,20 +11,20 @@ func outputToTerminal(_ string: String) -> IO<Void> {
 	IO { print(string) }
 }
 
-func presentMeny() -> IO<String> {
+func presentMany() -> IO<String> {
 	IO { "What do you want to do today?" }
 }
 
 greetUser("Jane")
 	.flatMap(outputToTerminal)
-	.flatMap(presentMeny >=> outputToTerminal)
+	.flatMap(presentMany >=> outputToTerminal)
 	.unsafeRun()
 
 print(String(repeating: "-", count: 30))
 
 (greetUser("Joe")
 	>>- outputToTerminal
-	>>- presentMeny
+	>>- presentMany
 	>>- outputToTerminal
 ).unsafeRun()
 

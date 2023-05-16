@@ -3,9 +3,13 @@
 import Foundation
 import Funswift
 
-class Person {
+class Person : CustomStringConvertible {
 	var firstName: String
 	var lastName: String
+    
+    var description: String {
+        "\(firstName) \(lastName)"
+    }
     
     init(firstName: String, lastName: String) {
         self.firstName = firstName
@@ -21,7 +25,7 @@ let changeablePerson =
 	>>- write("Doe", at: \.lastName)
 
 changeablePerson.hasChanges
-	? print("Was changed")
-	: print("Nothing was changed")
+    ? print("Was changed")
+    : print("\(changeablePerson.value): Nothing was changed")
 
 //: [Next](@next)

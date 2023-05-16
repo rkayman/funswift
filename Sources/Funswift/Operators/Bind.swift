@@ -30,17 +30,17 @@ public func >>- <A, B>(_ lhs: Changeable<A>, _ transform: @escaping (A) -> Chang
 }
 
 // MARK:- IO
-public func >>-<A, B>(_ lhs: IO<A>, _ transform: @escaping (A) -> IO<B>) -> IO<B> {
+public func >>- <A, B>(_ lhs: IO<A>, _ transform: @escaping (A) -> IO<B>) -> IO<B> {
 	lhs.flatMap(transform)
 }
 
 // MARK:- Writer
-public func >>-<A, M: Monoid>(_ lhs: Writer<A, M>, _ transform: @escaping (A) -> Writer<A, M>) -> Writer<A, M> {
+public func >>- <A, M: Monoid>(_ lhs: Writer<A, M>, _ transform: @escaping (A) -> Writer<A, M>) -> Writer<A, M> {
 	lhs.flatMap(transform)
 }
 
 // MARK:- Deferred
-public func >>-<A, B>(_ lhs: Deferred<A>, _ transform: @escaping (A) -> Deferred<B>) -> Deferred<B> {
+public func >>- <A, B>(_ lhs: Deferred<A>, _ transform: @escaping (A) -> Deferred<B>) -> Deferred<B> {
 	lhs.flatMap(transform)
 }
 
