@@ -44,7 +44,7 @@ final class IOTests: XCTestCase {
 	}
 
 	func testMapOperator() {
-		let result = IO<Int> { 10 } <&> String.init
+		let result = IO<Int> { 10 } <%> String.init
 		XCTAssertEqual("10", result.unsafeRun())
 
 	}

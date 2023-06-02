@@ -7,7 +7,7 @@ final class FunctorLawsTests: XCTestCase {
 
     // MARK: - Optionals
     func testIdentityOptional() {
-        let result = Optional<Int>.some(10) <&> identity
+        let result = Optional<Int>.some(10) <%> identity
         XCTAssertEqual(10, result)
 
         let result2 = Optional<Int>.some(10).map(identity)
@@ -27,7 +27,7 @@ final class FunctorLawsTests: XCTestCase {
 
     // MARK: - IO<A>
 	func testIdentityIO() {
-		let result = IO { 10 } <&> identity
+		let result = IO { 10 } <%> identity
 		XCTAssertEqual(10, result.unsafeRun())
 
 		let result2 = IO { 10 }.map(identity)
@@ -42,14 +42,14 @@ final class FunctorLawsTests: XCTestCase {
         let second = IO { 10 }.map(String.init >>> reversed)
         XCTAssertEqual(first, second)
 
-        let third = IO { 10 } <&> String.init >>> reversed
+        let third = IO { 10 } <%> String.init >>> reversed
         XCTAssertEqual(first, third)
     }
 
     // MARK: - Deferred<A>
 	func testIdentityDeferred() {
 
-		let firstDeferred = Deferred(10) <&> identity
+		let firstDeferred = Deferred(10) <%> identity
 		let secondDeferred = Deferred(10).map(identity)
 
 		let firstExpectation = XCTestExpectation(description: "Deferred wait first")
@@ -70,7 +70,7 @@ final class FunctorLawsTests: XCTestCase {
 
     func testFunctorCompositionDeferred() {
 
-        let firstDeferred = Deferred(10) <&> String.init >>> reversed
+        let firstDeferred = Deferred(10) <%> String.init >>> reversed
         let secondDeferred = Deferred(10).map(String.init >>> reversed)
 
         let firstExpectation = XCTestExpectation(description: "Deferred wait first")
@@ -103,7 +103,7 @@ final class FunctorLawsTests: XCTestCase {
 
         XCTAssertEqual("01", result.run(10))
 
-        let result2 = Reader<Int, Int> { $0 } <&> String.init >>> reversed
+        let result2 = Reader<Int, Int> { $0 } <%> String.init >>> reversed
         XCTAssertEqual("01", result2.run(10))
     }
 

@@ -17,7 +17,7 @@ final class OperatorKleisli: XCTestCase {
 	}
 
 	func testOptionalComposition() {
-		let increaseTwice = incr >=> incr
+		let increaseTwice = incr >-> incr
 
 		let result = increaseTwice(nil)
 		XCTAssertNil(result)
@@ -26,11 +26,11 @@ final class OperatorKleisli: XCTestCase {
 		let secondResult = increaseTwice(first)
 		XCTAssertEqual(12, secondResult)
 
-		XCTAssertEqual(22, 20 |> incr >=> incr)
+		XCTAssertEqual(22, 20 |> incr >-> incr)
 	}
 
 	func testResultComposition() {
-		let result = 10 |> incrValidation >=> incrValidation
+		let result = 10 |> incrValidation >-> incrValidation
 
 		XCTAssertEqual(12, try result.get())
 	}
