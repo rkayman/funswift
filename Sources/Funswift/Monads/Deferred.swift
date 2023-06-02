@@ -53,7 +53,7 @@ public struct Deferred<A>: GenericTypeConstructor {
 	}
 }
 
-// MARK:- functors map/mapT
+// MARK: - functors map/mapT
 extension Deferred {
 
 	public func map<B>(_ f: @escaping (A) -> B) -> Deferred<B> {
@@ -81,7 +81,7 @@ extension Deferred {
 	}
 }
 
-// MARK:- flatMap/flatMapT
+// MARK: - flatMap/flatMapT
 extension Deferred {
 
 	public func flatMap<B>(_ f: @escaping (A) -> Deferred<B>) -> Deferred<B> {
@@ -109,7 +109,7 @@ extension Deferred {
 	}
 }
 
-// MARK:- Cancelation
+// MARK: - Cancelation
 extension Deferred: AnyCancellableDeferred {
 
     public func cancel() {
@@ -119,7 +119,7 @@ extension Deferred: AnyCancellableDeferred {
     }
 }
 
-// MARK:- Delay
+// MARK: - Delay
 extension Deferred {
     
 	public static func delayed(by interval: TimeInterval, work: @escaping () -> A ) -> Deferred {
@@ -135,7 +135,7 @@ extension Deferred {
     }
 }
 
-// MARK:- Pure
+// MARK: - Pure
 extension Deferred {
 
 	public static func pure(_ value: A) -> Deferred<A> {
@@ -155,7 +155,7 @@ extension Deferred {
 	}
 }
 
-// MARK:- Zip
+// MARK: - Zip
 public func zip<A, B>(_ lhs: Deferred<A>, _ rhs: Deferred<B>) -> Deferred<(A, B)> {
 
     var result = Deferred<(A, B)> { callback in

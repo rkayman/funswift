@@ -32,7 +32,7 @@ public struct Reader<Environment, Output> {
 	}
 }
 
-// MARK:- Zip
+// MARK: - Zip
 public func zip<Environment, A, B>(_ first: Reader<Environment, A>, _ second: Reader<Environment, B>) -> Reader<Environment, (A, B)> {
     Reader { environment in (first.run(environment), second.run(environment)) }
 }
@@ -131,7 +131,7 @@ public func zip<Environment, A, B, C, D, E, F, G, H, I, J>(
     }
 
 
-// MARK:- ZipWith
+// MARK: - ZipWith
 public func zip<Environment, A, B, Output>(with f: @escaping (A, B) -> Output,
                                            _ lhs: Reader<Environment, A>,
                                            _ rhs: Reader<Environment, B>) -> Reader<Environment, Output> {

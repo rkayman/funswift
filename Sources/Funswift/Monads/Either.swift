@@ -31,7 +31,7 @@ public enum Either<E, B> {
     }
 }
 
-// MARK:- Functor
+// MARK: - Functor
 extension Either {
 
 	public func map<C>(_ f: (B) -> C) -> Either<E, C> {
@@ -62,7 +62,7 @@ extension Either {
 	}
 }
 
-// MARK:- Monad
+// MARK: - Monad
 extension Either {
 	public func flatMap<C>(_ f: (B) -> Either<E, C>) -> Either<E, C> {
 		switch self {
@@ -74,7 +74,7 @@ extension Either {
 	}
 }
 
-// MARK:- Values
+// MARK: - Values
 extension Either {
 
 	@discardableResult
@@ -126,14 +126,13 @@ extension Either {
 	}
 }
 
-// MARK:- Equating
+// MARK: - Equating
 extension Either where B: Equatable, E: Equatable { }
 
-// MARK:- Pure
+// MARK: - Pure
 public func pure<A, B>(_ value: B) -> Either<A, B> { .right(value) }
 
-
-// MARK:- Zip
+// MARK: - Zip
 public func zip<Err, A, B>(_ lhs: Either<Err, A>, _ rhs: Either<Err, B>) -> Either<Err, (A, B)> {
 	switch (lhs, rhs) {
 	case let (.right(first), .right(second)):

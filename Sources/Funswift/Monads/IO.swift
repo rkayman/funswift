@@ -23,7 +23,7 @@ extension IO: Equatable where A: Equatable {
 	}
 }
 
-// MARK:- functors map/mapT
+// MARK: - functors map/mapT
 extension IO {
 
 	public func map<B>(_ f: @escaping (A) -> B) -> IO<B> {
@@ -49,7 +49,7 @@ extension IO {
 	}
 }
 
-// MARK:- flatMap/flatMapT
+// MARK: - flatMap/flatMapT
 extension IO {
 
 	public func flatMap<B>(_ f: @escaping (A) -> IO<B>) -> IO<B> {
@@ -125,7 +125,7 @@ extension IO {
     }
 }
 
-// MARK:- Zip
+// MARK: - Zip
 public func zip<A, B>(_ first: IO<A>, _ second: IO<B>) -> IO<(A, B)> {
 	IO { (first.unsafeRun(), second.unsafeRun()) }
 }

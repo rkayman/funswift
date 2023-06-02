@@ -35,7 +35,7 @@ extension Predicate {
 	}
 }
 
-// MARK:- anyOf
+// MARK: - anyOf
 public func anyOf<A>(_ predicate: Predicate<A>...) -> Predicate<A> {
 	Predicate { a in predicate.contains(where: { $0.contains(a) }) }
 }
@@ -44,7 +44,7 @@ public func anyOf<A>(_ predicate: [Predicate<A>]) -> Predicate<A> {
 	Predicate { a in predicate.contains(where: { $0.contains(a) }) }
 }
 
-// MARK:- allOf
+// MARK: - allOf
 public func allOf<A>(_ predicate: Predicate<A>...) -> Predicate<A> {
 	Predicate { a in predicate.allSatisfy { $0.contains(a) } }
 }
@@ -53,7 +53,7 @@ public func allOf<A>(_ predicate: [Predicate<A>]) -> Predicate<A> {
 	Predicate { a in predicate.allSatisfy { $0.contains(a) } }
 }
 
-// MARK:- noneOf
+// MARK: - noneOf
 public func noneOf<A>(_ predicate: Predicate<A>...) -> Predicate<A> {
 	Predicate { a in !predicate.contains(where: { $0.contains(a) }) }
 }
