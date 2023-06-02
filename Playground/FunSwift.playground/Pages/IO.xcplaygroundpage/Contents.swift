@@ -17,7 +17,7 @@ func presentMany() -> IO<String> {
 
 greetUser("Jane")
 	.flatMap(outputToTerminal)
-	.flatMap(presentMany >=> outputToTerminal)
+	.flatMap(presentMany >-> outputToTerminal)
 	.unsafeRun()
 
 print(String(repeating: "-", count: 30))

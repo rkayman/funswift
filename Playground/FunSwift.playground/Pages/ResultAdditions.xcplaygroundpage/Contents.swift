@@ -36,7 +36,7 @@ zip(
 .onSuccess { print("Result: \($0)") }
 .onFailure { print("Failed: \($0)") }
 
-let transformationPipe = multiplyByTen >=> toString
+let transformationPipe = multiplyByTen >-> toString
 
 validate(value: 5)
 	>>- transformationPipe
